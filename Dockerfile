@@ -1,4 +1,4 @@
-FROM hypriot/rpi-alpine
+FROM hypriot/rpi-alpine as open-m3u8Git
 WORKDIR /app
 RUN git clone https://github.com/0xboobface/open-m3u8.git
 
@@ -7,11 +7,11 @@ WORKDIR /app/open-m3u8
 COPY --from=open-m3u8Git --chown=gradle:gradle /app /app
 RUN gradle install
 
-FROM hypriot/rpi-alpine
+FROM hypriot/rpi-alpine as ctbrecGit
 WORKDIR /app
 RUN git clone https://github.com/0xboobface/ctbrec.git
 
-FROM maven:3-jdk-11-slim
+FROM maven:3-jdk-11-slim as ctbrecBuild
 ARG ctbrec
 ARG versionM3u8
 WORKDIR /app/master
@@ -21,7 +21,7 @@ RUN mvn clean install:install-file -Dfile=/app/common/libs/open-m3u8-${versionM3
 RUN mvn clean
 RUN mvn install
 
-FROM openjdk:12-alpine
+FROM openjdk:12-alpine 
 WORKDIR /app
 ARG memory
 ARG version
