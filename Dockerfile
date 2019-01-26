@@ -1,4 +1,4 @@
-FROM rpi-alpine/git as open-m3u8Git
+FROM rpi-alpine as open-m3u8Git
 WORKDIR /app
 RUN git clone https://github.com/0xboobface/open-m3u8.git
 
@@ -7,7 +7,7 @@ WORKDIR /app/open-m3u8
 COPY --from=open-m3u8Git --chown=gradle:gradle /app /app
 RUN gradle install
 
-FROM rpi-alpine/git as ctbrecGit
+FROM rpi-alpine as ctbrecGit
 WORKDIR /app
 RUN git clone https://github.com/0xboobface/ctbrec.git
 
